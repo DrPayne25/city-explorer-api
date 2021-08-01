@@ -4,7 +4,8 @@
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
-Creat an endpoint that allows users to see the previous 3 day forcast if they search specific cities!
+Create an endpoint that allows users to see the previous 3 day forecast if they search specific cities!
+![umi](/img/uml.png)
 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
