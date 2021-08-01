@@ -11,7 +11,6 @@ const PORT = process.env.PORT;
 
 
 let weatherData= require('./data/weather.json');
-const { response } = require('express');
 
 class Forecast {
   constructor(description, date) {
@@ -32,7 +31,7 @@ app.get('/weather', (req, res) => {
         weatherArr.push(new Forecast(`Forecast for ${weatherInfo.datetime}: Low: ${weatherInfo.low_temp}, High: ${weatherInfo.high_temp} with ${weatherInfo.weather.description}`, weatherInfo.datetime)
         );
       });
-      response.send(weatherArr);
+      res.send(weatherArr);
     }else {
       res.status(400).send('Some Mistakes have been made');
     }
