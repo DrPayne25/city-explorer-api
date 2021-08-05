@@ -1,16 +1,13 @@
 'use strict';
-
 //basically this is your import in react
 const express = require('express');
 const app = express();
 const cors = require('cors');
 app.use(cors());
+const axios = require('axios');
 //use dotenv to access .env file -- must be done before defining PORT
 require('dotenv').config();
 const PORT = process.env.PORT;
-
-
-let weatherData= require('./data/weather.json');
 
 class Forecast {
   constructor(description, date) {
@@ -19,9 +16,14 @@ class Forecast {
   }
 }
 
+app.get('/test', (req,res) =>{
+  res.send('this is working');
+});
 
-app.get('/weather', (req, res) => {
+app.get('/weather', async (req, res) => {
   let searchQuery = req.query.city;
+  console.log(searchQuery);
+  let weatherData= await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=API_KEY`);
   let weatherArr = [];
   if (searchQuery) {
     let localWeather = weatherData.find((city)=> city.city_name === searchQuery);
@@ -32,6 +34,7 @@ app.get('/weather', (req, res) => {
         );
       });
       res.send(weatherArr);
+      console.log(searchQuery);
     }else {
       res.status(400).send('Some Mistakes have been made');
     }
