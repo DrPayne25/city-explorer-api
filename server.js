@@ -19,15 +19,21 @@ class Forecast {
   }
 }
 
+// app.get('/test', async (req, res) => {
+//   let weatherData = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=${process.env.WEATHER_API_KEY}`);
+
+//   res.send(weatherData);
+// })
+
 
 app.get('/weather', async (req, res) => {
-  let searchQuery = req.query.city;
-  let weatherData= await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=${process.env.WEATHER_API_KEY}`);
-  console.log(weatherData);
+  let lat = req.query.lat;
+  let lon = req.query.lon;
+  let weatherData = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${process.env.WEATHER_API_KEY}&days=4`);
+  console.log(weatherData.data);
   let weatherArr = [];
-  if (searchQuery) {
-    let localWeather = weatherData.find((city)=> city.city_name === searchQuery);
-
+  if (lat && lon) {
+    let localWeather = weatherData.data
     if(localWeather) {
       localWeather.data.map((weatherInfo) => {
         weatherArr.push(new Forecast(`Forecast for ${weatherInfo.datetime}: Low: ${weatherInfo.low_temp}, High: ${weatherInfo.high_temp} with ${weatherInfo.weather.description}`, weatherInfo.datetime)
