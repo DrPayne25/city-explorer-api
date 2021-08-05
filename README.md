@@ -7,6 +7,9 @@
 Create an endpoint that allows users to see the previous 3 day forecast if they search specific cities!
 ![umi](/img/uml.png)
 
+lab-08 uml
+![umi2](/img/uml2.png)
+
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
