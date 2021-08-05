@@ -23,22 +23,29 @@ app.get('/test', (req,res) =>{
 app.get('/weather', async (req, res) => {
   let searchQuery = req.query.city;
   console.log(searchQuery);
-  let weatherData= await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=API_KEY`);
-  let weatherArr = [];
-  if (searchQuery) {
-    let localWeather = weatherData.find((city)=> city.city_name === searchQuery);
-
-    if(localWeather) {
-      localWeather.data.map((weatherInfo) => {
-        weatherArr.push(new Forecast(`Forecast for ${weatherInfo.datetime}: Low: ${weatherInfo.low_temp}, High: ${weatherInfo.high_temp} with ${weatherInfo.weather.description}`, weatherInfo.datetime)
-        );
-      });
-      res.send(weatherArr);
-      console.log(searchQuery);
-    }else {
-      res.status(400).send('Some Mistakes have been made');
+  try {
+    let weatherData= await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=${process.env.WEATHER_API_KEY}`);
+    weatherData = weatherData.data
+    console.log(typeof(weatherData));
+    let weatherArr = [];
+    if (searchQuery) {
+      let localWeather = weatherData.find((city)=> city.city_name === searchQuery);
+      if(localWeather) {
+        localWeather.data.map((weatherInfo) => {
+          weatherArr.push(new Forecast(`Forecast for ${weatherInfo.datetime}: Low: ${weatherInfo.low_temp}, High: ${weatherInfo.high_temp} with ${weatherInfo.weather.description}`, weatherInfo.datetime)
+          );
+        });
+        res.send(weatherArr);
+        console.log(searchQuery);
+      }else {
+        res.status(400).send('Some Mistakes have been made');
+      }
     }
   }
+  catch (e) {
+    console.log(e);
+  }
+
 });
 
 app.listen(PORT, () => console.log(`Yo ${PORT} is up`));
