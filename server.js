@@ -4,13 +4,13 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const axios = require('axios');
 app.use(cors());
 //use dotenv to access .env file -- must be done before defining PORT
 require('dotenv').config();
 const PORT = process.env.PORT;
 
 
-let weatherData= require('./data/weather.json');
 
 class Forecast {
   constructor(description, date) {
@@ -20,8 +20,10 @@ class Forecast {
 }
 
 
-app.get('/weather', (req, res) => {
+app.get('/weather', async (req, res) => {
   let searchQuery = req.query.city;
+  let weatherData= await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=${process.env.WEATHER_API_KEY}`);
+  console.log(weatherData);
   let weatherArr = [];
   if (searchQuery) {
     let localWeather = weatherData.find((city)=> city.city_name === searchQuery);
