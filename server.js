@@ -13,9 +13,9 @@ const PORT = process.env.PORT;
 
 
 class Forecast {
-  constructor(day) {
-    this.description = `date: ${day.valid_date}`;
-    this.date = `has ${day.weather.description}`;
+  constructor(description, date) {
+    this.description = description;
+    this.date = date;
   }
 }
 
@@ -28,7 +28,7 @@ app.get('/weather', async (req, res) => {
     let localWeather = weatherData.data
     if(localWeather) {
       localWeather.data.map((weatherInfo) => {
-        weatherArr.push(new Forecast(day)
+        weatherArr.push(new Forecast(`Forecast for ${weatherInfo.datetime}: Low: ${weatherInfo.low_temp}, High: ${weatherInfo.high_temp} with ${weatherInfo.weather.description}`, weatherInfo.datetime)
         );
       });
       res.send(weatherArr);
