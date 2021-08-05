@@ -13,30 +13,22 @@ const PORT = process.env.PORT;
 
 
 class Forecast {
-  constructor(description, date) {
-    this.description = description;
-    this.date = date;
+  constructor(day) {
+    this.description = `date: ${day.valid_date}`;
+    this.date = `has ${day.weather.description}`;
   }
 }
-
-// app.get('/test', async (req, res) => {
-//   let weatherData = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?city=${searchQuery}&key=${process.env.WEATHER_API_KEY}`);
-
-//   res.send(weatherData);
-// })
-
 
 app.get('/weather', async (req, res) => {
   let lat = req.query.lat;
   let lon = req.query.lon;
-  let weatherData = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${process.env.WEATHER_API_KEY}&days=4`);
-  console.log(weatherData.data);
+  let weatherData = await axios.get(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${process.env.WEATHER_API_KEY}&days=3`);
   let weatherArr = [];
   if (lat && lon) {
     let localWeather = weatherData.data
     if(localWeather) {
       localWeather.data.map((weatherInfo) => {
-        weatherArr.push(new Forecast(`Forecast for ${weatherInfo.datetime}: Low: ${weatherInfo.low_temp}, High: ${weatherInfo.high_temp} with ${weatherInfo.weather.description}`, weatherInfo.datetime)
+        weatherArr.push(new Forecast(day)
         );
       });
       res.send(weatherArr);
@@ -46,19 +38,23 @@ app.get('/weather', async (req, res) => {
   }
 });
 
+// let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&query=${city}&page=1`
+
+app.get('/movies', async (req, res) => {
+  let city = req.query.lat
+  let movieData = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&language=en-US&query=${city}&page=1`)
+  let movieArr = [];
+  if (city) {
+    let namedMovies = movieData.data
+    if (namedMovies) {
+      movieData.data.map((movie)=> {
+        movieArr.push();
+      })
+    }
+  }
+});
+
 app.listen(PORT, () => console.log(`Yo ${PORT} is up`));
-//req = request res = response I like to be lazy sorry lol the / indicates the url / that it should be listening on
-// app.get('/', (req, res) => {
-//   //once we hear that request we should sent back the following results
-//   res.send('Hello, from the inside');
-// });
 
-// app.get('/banana', (request, response)=> {
-//   response.send('Bananas are yellow did you know?');
-// });
-
-// app.get('/*', (req, res) => {
-//   res.status(404).send(`Something isn't right try again`);
-// })
 
 
