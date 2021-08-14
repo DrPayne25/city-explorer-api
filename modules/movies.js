@@ -1,6 +1,5 @@
 'use strict';
 
-module.exports = (getMovies);
 const axios = require('axios');
 
 class Movie {
@@ -26,3 +25,5 @@ async function getMovies(req, res) {
   }
   
 }
+
+module.exports = (getMovies);
